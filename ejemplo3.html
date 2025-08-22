@@ -44,18 +44,27 @@
             return `Tienes exactamente ${edad} años.`;
         }
 
+        
         function diasProximoCumple(fechaNac) {
             const hoy = new Date();
             const nacimiento = new Date(fechaNac);
-            const proximoCumple = new Date(hoy.getFullYear(), nacimiento.getMonth(), nacimiento.getDate());
-            
-            if (proximoCumple < hoy) {
-                proximoCumple.setFullYear(hoy.getFullYear() + 1);
+
+            const hoySimple = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+            let proximoCumple = new Date(hoy.getFullYear(), nacimiento.getMonth(), nacimiento.getDate());
+
+            if (proximoCumple < hoySimple) {
+             proximoCumple = new Date(hoy.getFullYear() + 1, nacimiento.getMonth(), nacimiento.getDate());
             }
-            
-            const diasRestantes = Math.ceil((proximoCumple - hoy) / (1000 * 60 * 60 * 24));
-            return `Faltan ${diasRestantes} días para tu próximo cumpleaños.`;
-        }
+
+             const unDia = 1000 * 60 * 60 * 24;
+             const diasRestantes = Math.round((proximoCumple - hoySimple) / unDia);
+
+            if (diasRestantes === 0) {
+               return " ¡Hoy es tu cumpleaños! ";
+             }
+
+               return `Faltan ${diasRestantes} días para tu próximo cumpleaños.`;
+             }
 
         function actualizarHistorial(año) {
             historial.unshift(año);
