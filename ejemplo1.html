@@ -12,15 +12,34 @@
         let nombre = "Araceli";
         const edad = 17;
         var ciudad = "Ciudad Autónoma de Buenos Aires";
+        
+        const esEstudiante = true;
+        const hobbies = ["programar 3d", "leer", "dibujar"];
+        const persona = {
+            nombre: "Araceli",
+            edad: 17,
+            ciudad: "CABA",
+            estudiante: true
+        };
 
         console.log("Nombre:", nombre);
         console.log("Edad:", edad);
         console.log("Ciudad:", ciudad);
+        console.log("Nombre:", nombre);
+        console.log("¿Es estudiante?", esEstudiante);
+        console.log("Hobbies:", hobbies);
+        console.log("Objeto persona:", persona);
 
         console.log("Hola, " + nombre + ", tienes " + edad + " años.");
-        
         console.log(`Hola, ${nombre}, tienes ${edad} años y vives en ${ciudad}.`);
 
+        const personas = [
+            { nombre: "Araceli", edad: 17, ciudad: "CABA" },
+            { nombre: "Melani", edad: 17, ciudad: "CABA" },
+            { nombre: "Fernanda", edad: 17, ciudad: "CABA" }
+        ];        
+
+        console.table(personas);
     </script>
 </body>
 </html>

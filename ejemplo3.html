@@ -6,32 +6,96 @@
     <title>Funciones y Condicionales</title>
 </head>
 <body>
-    <h1>Calculadora de Edad</h1>
+    <h1>Calculadora de Edad Exacta</h1>
 
-    <label for="nacimiento">Año de nacimiento:</label>
-    <input type="number" id="nacimiento">
-    <button id="calcular">Calcular edad</button>
+    <label for="fechaNacimiento">Fecha de nacimiento:</label>
+    <input type="date" id="fechaNacimiento">
+    <button id="calcular">Calcular edad exacta</button>
+    <button id="proxCumple">Días para próximo cumple</button>
 
     <p id="resultadoEdad"></p>
+    <div id="historial">
+        <h3>Últimas 5 consultas:</h3>
+        <ul id="listaHistorial"></ul>
+    </div>
 
     <script>
-        function calcularEdad(añoNacimiento) {
-            const añoActual = new Date().getFullYear();
-            const edad = añoActual - añoNacimiento;
+        const historial = [];
 
-            if (edad < 0) {
-                return "El año de nacimiento no puede ser futuro";
-            } else if (edad > 120) {
-                return "¿Estás seguro de ese año?";
-            } else {
-                return `Tienes aproximadamente ${edad} años.`;
+        function calcularEdadExacta(fechaNac) {
+            const hoy = new Date();
+            const nacimiento = new Date(fechaNac);
+            
+            if (nacimiento > hoy) {
+                return "La fecha no puede ser futura.";
             }
-        }   
+
+            let edad = hoy.getFullYear() - nacimiento.getFullYear();
+            const mes = hoy.getMonth() - nacimiento.getMonth();
+            
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                edad--;
+            }
+
+            if (edad > 120) {
+                return "¿Estás seguro de esa fecha?";
+            }
+
+            return `Tienes exactamente ${edad} años.`;
+        }
+
+        function diasProximoCumple(fechaNac) {
+            const hoy = new Date();
+            const nacimiento = new Date(fechaNac);
+            const proximoCumple = new Date(hoy.getFullYear(), nacimiento.getMonth(), nacimiento.getDate());
+            
+            if (proximoCumple < hoy) {
+                proximoCumple.setFullYear(hoy.getFullYear() + 1);
+            }
+            
+            const diasRestantes = Math.ceil((proximoCumple - hoy) / (1000 * 60 * 60 * 24));
+            return `Faltan ${diasRestantes} días para tu próximo cumpleaños.`;
+        }
+
+        function actualizarHistorial(año) {
+            historial.unshift(año);
+            if (historial.length > 5) {
+                historial.pop();
+            }
+            
+            const lista = document.getElementById("listaHistorial");
+            lista.innerHTML = '';
+            historial.forEach(año => {
+                const li = document.createElement("li");
+                li.textContent = año;
+                lista.appendChild(li);
+            });
+        }
+
         document.getElementById("calcular").addEventListener("click", function() {
-        const añoNacimiento = document.getElementById("nacimiento").value;
-        const resultado = calcularEdad(Number(añoNacimiento));
-        document.getElementById("resultadoEdad").textContent = resultado;
-    });
+            const fechaNac = document.getElementById("fechaNacimiento").value;
+            if (!fechaNac) {
+                alert("Por favor ingresa una fecha");
+                return;
+            }
+            
+            const resultado = calcularEdadExacta(fechaNac);
+            document.getElementById("resultadoEdad").textContent = resultado;
+            
+            const año = fechaNac.split('-')[0];
+            actualizarHistorial(año);
+        });
+
+        document.getElementById("proxCumple").addEventListener("click", function() {
+            const fechaNac = document.getElementById("fechaNacimiento").value;
+            if (!fechaNac) {
+                alert("Por favor ingresa una fecha");
+                return;
+            }
+            
+            const resultado = diasProximoCumple(fechaNac);
+            document.getElementById("resultadoEdad").textContent = resultado;
+        });
     </script>
 </body>
 </html>
